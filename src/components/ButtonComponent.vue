@@ -14,7 +14,7 @@ defineProps<Props>();
 $blue: #1d90f5;
 button {
   padding: 0 2rem;
-  width: min-content;
+  width: fit-content;
   height: 3rem;
   background: $blue;
   border-radius: 2rem;

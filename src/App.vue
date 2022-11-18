@@ -3,9 +3,9 @@
 </template>
 
 <style lang="scss">
-@import "~@/assets/main.scss";
+@import "~@/assets/styles/main.scss";
 #app {
-  color: $blue;
+  color: $white;
   box-sizing: border-box;
   background-color: $blue;
   background-image: linear-gradient(135deg, #342e2e 0%, #232660 100%);

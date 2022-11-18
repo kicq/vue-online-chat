@@ -34,7 +34,7 @@ const isActive = ref(false);
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/variables.scss";
+@import "~@/assets/styles/variables.scss";
 
 .input-text {
   background: rgba($white, 0.1);

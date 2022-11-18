@@ -1,12 +1,22 @@
 <template>
-  <div class="login-page">
-    <form class="form" action="">
-      <h1>Sign In</h1>
-      <InputText title="Логин или email" placeholder="Введите логин" />
-      <InputText title="Пароль" placeholder="Введите пароль" type="password" />
-      <ButtonComponent text="Войти" />
+  <div class="registration-page">
+    <form action="">
+      <h1>Sign Up</h1>
+      <InputText title="Login" placeholder="Enter login" />
+      <InputText title="Email" placeholder="Enter your email" />
+      <InputText
+        title="Password"
+        placeholder="Enter password"
+        type="password"
+      />
+      <InputText
+        title="Password"
+        placeholder="Repeat the password"
+        type="password"
+      />
+      <ButtonComponent text="Sign up" />
       <div class="subtitle">
-        New? <RouterLink to="/signup">Create an account.</RouterLink>
+        Already have an account? <RouterLink to="/login">Sign in →</RouterLink>
       </div>
     </form>
   </div>
@@ -19,7 +29,7 @@ import InputText from "@/components/InputText.vue";
 
 <style lang="scss" scoped>
 @import "~@/assets/styles/variables";
-.login-page {
+.registration-page {
   width: 100%;
   height: 100%;
   position: relative;
