@@ -1,13 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import 'variables';
 
-html, body, input, button {
+html, body, input, button, div {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
+
+
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
