@@ -42,20 +42,14 @@ export default class Users {
     return createUserWithEmailAndPassword(auth, email, password)
       .then(({ user }) => user)
       .then((resp) => {
+        const data = toUserDataResponse(resp);
         const {
           user: { uid, email, avatarURL },
-        } = toUserDataResponse(resp);
+        } = data;
         const user: UserInfo = { uid, email, name, avatarURL };
 
         return setDoc(doc(db, "users", user.uid), user)
-          .then(async () => {
-            const docRef = doc(db, "users", user.uid);
-            const docSnap = await getDoc(docRef);
-
-            console.log("user", docSnap.data());
-
-            return toUserDocDataResponse(docSnap.data() as UserInfo);
-          })
+          .then(async () => data)
           .catch((err) => userDataReject(err));
       })
       .catch((error) => {
@@ -73,6 +67,14 @@ export default class Users {
       .catch((error) => {
         return userDataReject(error);
       });
+  }
+
+  static async getUserData(uid: string) {
+    const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(docRef);
+    const data = <UserInfo>docSnap.data();
+    if (!data || !data.uid) return null;
+    return data;
   }
 
   static signOut(): Promise<boolean> {
@@ -122,18 +124,18 @@ function toUserDataResponse(user: User): UserDataResponse {
   };
 }
 
-function toUserDocDataResponse(user: UserInfo): UserDataResponse {
-  return {
-    user: {
-      uid: user.uid,
-      name: user.name || "NoName",
-      email: user.email || "",
-      avatarURL: user.avatarURL || "",
-    },
-    error: false,
-    errorData: null,
-  };
-}
+// function toUserDocDataResponse(user: UserInfo): UserDataResponse {
+//   return {
+//     user: {
+//       uid: user.uid,
+//       name: user.name || "NoName",
+//       email: user.email || "",
+//       avatarURL: user.avatarURL || "",
+//     },
+//     error: false,
+//     errorData: null,
+//   };
+// }
 
 function userDataReject(error: unknown): UserDataError {
   const errorData = getError(error);

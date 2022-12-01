@@ -24,13 +24,14 @@ export default class User extends VuexModule {
 
   @Action
   async logIn({ email, password }: SignInForm) {
-    const data = await Users.signIn(email, password);
-    if (data.error) return data;
-    else {
-      this.updateUser(data.user);
+    const response = await Users.signIn(email, password);
+    if (response.error) return response;
+    const user = await Users.getUserData(response.user.uid);
+    if (user) {
+      this.updateUser(user);
       this.updateAuth(true);
       router.push({ name: "home" });
-      return data;
+      return response;
     }
   }
 
@@ -39,7 +40,8 @@ export default class User extends VuexModule {
     const data = await Users.createUser(email, password, username);
     console.log("signUp", data);
     if (data.error) return data;
-    else {
+    const user = await Users.getUserData(data.user.uid);
+    if (user) {
       Users.updateProfileData({ displayName: username });
       this.updateUser(data.user);
       this.updateAuth(true);
