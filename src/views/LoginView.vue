@@ -1,10 +1,27 @@
 <template>
   <div class="login-page">
-    <form class="form" action="">
+    <form @submit.prevent="submit" class="form">
       <h1>Sign In</h1>
-      <InputText title="Логин или email" placeholder="Введите логин" />
-      <InputText title="Пароль" placeholder="Введите пароль" type="password" />
-      <ButtonComponent text="Войти" />
+      <InputText
+        v-model="form.email"
+        :title="'Enter email'"
+        validateType="email"
+        type="email"
+        required
+        placeholder="Введите логин"
+        @isValidValue="setValid('email', $event)"
+      />
+      <InputText
+        v-model="form.password"
+        title="Пароль"
+        placeholder="Введите пароль"
+        validateType="password"
+        required
+        type="password"
+        @isValidValue="setValid('password', $event)"
+      />
+      <span class="error-text">{{ errorText }}</span>
+      <ButtonComponent type="submit" text="Войти" />
       <div class="subtitle">
         New? <RouterLink to="/signup">Create an account.</RouterLink>
       </div>
@@ -13,8 +30,39 @@
 </template>
 
 <script lang="ts" setup>
+import { LogInForm } from "@/@types/forms";
 import ButtonComponent from "@/components/ButtonComponent.vue";
 import InputText from "@/components/InputText.vue";
+import { store } from "@/store";
+import User from "@/store/user";
+import { ref } from "vue";
+import { getModule } from "vuex-module-decorators";
+
+const userModule = getModule(User, store);
+
+const valid = ref({
+  email: false,
+  password: false,
+});
+const form = ref<LogInForm>({
+  email: "",
+  password: "",
+});
+const errorText = ref("");
+
+function setValid(key: keyof LogInForm, isValidValue: boolean) {
+  valid.value[key] = isValidValue;
+}
+async function submit() {
+  if (!valid.value.email || !valid.value.password) return;
+  const result = await userModule.logIn(form.value);
+  if (result.error) {
+    errorText.value = result.errorData.code;
+  }
+  console.log("result", result);
+}
+
+console.log("getModule", userModule.isAuth);
 </script>
 
 <style lang="scss" scoped>
@@ -27,7 +75,7 @@ import InputText from "@/components/InputText.vue";
   display: flex;
   align-items: center;
   justify-content: center;
-  form {
+  .form {
     width: 20rem;
     box-sizing: border-box;
     padding: 1.2rem;
@@ -45,6 +93,11 @@ import InputText from "@/components/InputText.vue";
     a {
       margin-left: 0.5rem;
     }
+  }
+
+  .error-text {
+    color: $red;
+    font-size: 1rem;
   }
 }
 </style>

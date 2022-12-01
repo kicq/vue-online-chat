@@ -14,8 +14,8 @@
 
 <script lang="ts" setup>
 interface Props {
-  size: number;
-  ringColor: string;
+  size?: number;
+  ringColor?: string;
 }
 withDefaults(defineProps<Props>(), {
   size: 3,

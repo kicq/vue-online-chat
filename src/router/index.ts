@@ -1,5 +1,8 @@
+import { store } from "@/store";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { getModule } from "vuex-module-decorators";
 import HomeView from "../views/HomeView.vue";
+import User from "./../store/user";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -27,6 +30,15 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+const { isAuth } = getModule(User, store);
+
+router.beforeEach((guard) => {
+  if (guard.name === "home" && !isAuth) {
+    router.push("login");
+  }
+  console.log("guard", guard);
 });
 
 export default router;

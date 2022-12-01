@@ -1,23 +1,34 @@
 <template>
-  <div class="input-text" :class="{ focused: isActive }">
-    <div class="title">{{ title }}</div>
+  <div
+    class="input-text"
+    :class="{ focused: isActive, invalid: !isValidValue }"
+  >
+    <div class="title">{{ title || props.title }}</div>
     <input
       @focusin="isActive = true"
-      @focusout="isActive = false"
+      @focusout="focusOut"
       :type="type"
       :placeholder="props.placeholder"
       :name="name"
       autocomplete="on"
+      :value="modelValue"
+      @input="
+        emit('update:modelValue', ($event.target as HTMLInputElement).value)
+      "
     />
   </div>
 </template>
 
 <script lang="ts" setup>
+import { Validation } from "@/utils/validation";
 import { ref } from "vue";
 
 interface Props {
+  modelValue: string;
   title: string;
   placeholder: string;
+  validateType?: "email" | "password" | "username";
+  required?: boolean;
   /** input:type */
   type: string;
   /** input:name */
@@ -29,6 +40,27 @@ const props = withDefaults(defineProps<Props>(), {
   type: "text",
   name: "default",
 });
+
+interface Emits {
+  (event: "update:modelValue", text: string): void;
+  (event: "isValidValue", isValidValue: boolean): void;
+}
+const emit = defineEmits<Emits>();
+const isValidValue = ref<boolean>(true);
+const title = ref("");
+function focusOut() {
+  isActive.value = false;
+  if (props.required && Validation.isEmpty(props.modelValue)) {
+    isValidValue.value = false;
+    title.value = "This field is required";
+    return emit("isValidValue", isValidValue.value);
+  }
+  if (!props.validateType) return;
+  const { message, error } = Validation[props.validateType](props.modelValue);
+  isValidValue.value = !error;
+  title.value = message;
+  emit("isValidValue", isValidValue.value);
+}
 
 const isActive = ref(false);
 </script>
@@ -59,6 +91,13 @@ const isActive = ref(false);
     }
     input {
       padding-top: 0;
+    }
+  }
+  &.invalid {
+    outline: 2px solid $red;
+    box-shadow: 0 0 0 4px rgba($red, 0.2);
+    .title {
+      color: $red;
     }
   }
   .title {

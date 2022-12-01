@@ -1,9 +1,14 @@
 import { createStore } from "vuex";
 
-export default createStore({
+import user from "./user";
+export interface State {
+  page?: number;
+}
+
+export const store = createStore<State>({
   state: {},
-  getters: {},
-  mutations: {},
-  actions: {},
-  modules: {},
+  modules: {
+    user,
+  },
+  strict: false,
 });

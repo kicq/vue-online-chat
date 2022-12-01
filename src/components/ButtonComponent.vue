@@ -1,10 +1,11 @@
 <template>
-  <button>{{ text }}</button>
+  <button :type="type">{{ text }}</button>
 </template>
 
 <script lang="ts" setup>
 interface Props {
   text: string;
+  type?: "button" | "submit" | "reset";
 }
 
 defineProps<Props>();
