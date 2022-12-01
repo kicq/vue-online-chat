@@ -21,7 +21,7 @@
         @isValidValue="setValid('password', $event)"
       />
       <span class="error-text">{{ errorText }}</span>
-      <ButtonComponent type="submit" text="Войти" />
+      <ButtonComponent type="submit" text="Войти" :disabled="disabled" />
       <div class="subtitle">
         New? <RouterLink to="/signup">Create an account.</RouterLink>
       </div>
@@ -39,6 +39,7 @@ import { ref } from "vue";
 import { getModule } from "vuex-module-decorators";
 
 const userModule = getModule(User, store);
+const disabled = ref(false);
 
 const valid = ref({
   email: false,
@@ -54,10 +55,13 @@ function setValid(key: keyof LogInForm, isValidValue: boolean) {
   valid.value[key] = isValidValue;
 }
 async function submit() {
+  if (disabled.value) return;
   if (!valid.value.email || !valid.value.password) return;
+  disabled.value = true;
   const result = await userModule.logIn(form.value);
   if (result.error) {
     errorText.value = result.errorData.code;
+    disabled.value = false;
   }
   console.log("result", result);
 }

@@ -1,14 +1,21 @@
 <template>
-  <button :type="type">{{ text }}</button>
+  <button @click="$emit('click', $event)" :type="type" :disabled="disabled">
+    {{ text }}
+  </button>
 </template>
 
 <script lang="ts" setup>
 interface Props {
   text: string;
+  disabled?: boolean;
   type?: "button" | "submit" | "reset";
 }
 
 defineProps<Props>();
+interface Emits {
+  (event: "click", payload: MouseEvent): void;
+}
+defineEmits<Emits>();
 </script>
 
 <style lang="scss" scoped>

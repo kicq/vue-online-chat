@@ -37,7 +37,7 @@
         required
       />
       <span class="error-text">{{ errorText }}</span>
-      <ButtonComponent type="submit" text="Sign up" />
+      <ButtonComponent type="submit" text="Sign up" :disabled="disabled" />
       <div class="subtitle">
         Already have an account? <RouterLink to="/login">Sign in →</RouterLink>
       </div>
@@ -55,7 +55,7 @@ import { store } from "@/store";
 import { getModule } from "vuex-module-decorators";
 
 const userModule = getModule(User, store);
-
+const disabled = ref(false);
 const errorText = ref("");
 
 const valid = ref({
@@ -87,9 +87,14 @@ function isFormValid() {
 }
 
 async function submit() {
+  if (disabled.value) return;
   if (!isFormValid()) return;
+  disabled.value = true;
   const data = await userModule.signUp(form.value);
-  if (data.error) errorText.value = data.errorData.code;
+  if (data.error) {
+    errorText.value = data.errorData.code;
+    disabled.value = true;
+  }
 }
 </script>
 

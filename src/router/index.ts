@@ -32,9 +32,9 @@ const router = createRouter({
   routes,
 });
 
-const { isAuth } = getModule(User, store);
+router.beforeEach(async (guard) => {
+  const { isAuth } = getModule(User, store);
 
-router.beforeEach((guard) => {
   if (guard.name === "home" && !isAuth) {
     router.push("login");
   }

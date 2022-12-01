@@ -2,13 +2,25 @@
   <div class="head-line">
     <div class="content">
       <div class="title">SpaceChat</div>
-      <AvatarCircle :size="3.5" :ringColor="'white'" />
+      <div class="right">
+        <div class="username">
+          {{ user.name }}
+        </div>
+        <ButtonComponent @click="logOut" text="logout" />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import AvatarCircle from "@/components/AvatarCircle.vue";
+import ButtonComponent from "@/components/ButtonComponent.vue";
+import { store } from "@/store";
+import User from "@/store/user";
+import { getModule } from "vuex-module-decorators";
+const { signOut, user } = getModule(User, store);
+function logOut() {
+  signOut();
+}
 </script>
 
 <style lang="scss" scoped>
@@ -27,7 +39,7 @@ import AvatarCircle from "@/components/AvatarCircle.vue";
   .content {
     margin: 0 auto;
     max-width: 90rem;
-    padding: 0 1.5rem;
+    padding: 0 0 0 1.5rem;
     height: 100%;
     display: flex;
     align-items: center;
@@ -36,6 +48,15 @@ import AvatarCircle from "@/components/AvatarCircle.vue";
       font-size: 1.6rem;
       font-weight: 800;
       letter-spacing: 0.12rem;
+    }
+    .right {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      .username {
+        font-size: 1.4rem;
+        font-weight: 700;
+      }
     }
   }
 }

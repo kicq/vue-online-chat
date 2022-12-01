@@ -27,7 +27,8 @@ export default class User extends VuexModule {
     const data = await Users.signIn(email, password);
     if (data.error) return data;
     else {
-      this.updateData(data.user, true);
+      this.updateUser(data.user);
+      this.updateAuth(true);
       router.push({ name: "home" });
       return data;
     }
@@ -35,19 +36,41 @@ export default class User extends VuexModule {
 
   @Action
   async signUp({ email, username, password }: SignUpForm) {
-    const data = await Users.createUser(email, password);
+    const data = await Users.createUser(email, password, username);
+    console.log("signUp", data);
     if (data.error) return data;
     else {
       Users.updateProfileData({ displayName: username });
-      this.updateData(data.user, true);
+      this.updateUser(data.user);
+      this.updateAuth(true);
       router.push({ name: "home" });
       return data;
     }
   }
 
+  @Action
+  async signOut() {
+    const isLoggedOut = await Users.signOut();
+    if (isLoggedOut) {
+      const user: UserInfo = {
+        uid: "",
+        name: "",
+        email: "",
+        avatarURL: "",
+      };
+      this.updateUser(user);
+      this.updateAuth(false);
+      router.push({ name: "login" });
+    }
+  }
+
   @Mutation
-  private updateData(user: UserInfo, auth: boolean) {
+  updateUser(user: UserInfo) {
     this.user = user;
-    this.isAuth = auth;
+  }
+
+  @Mutation
+  updateAuth(state: boolean) {
+    this.isAuth = state;
   }
 }
