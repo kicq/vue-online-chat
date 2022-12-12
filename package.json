@@ -5,12 +5,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "deploy": "npm run build & firebase deploy",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@types/uuid": "^9.0.0",
     "core-js": "^3.8.3",
-    "firebase": "^9.14.0",
     "javascript-time-ago": "^2.5.9",
     "string-to-color": "^2.2.2",
     "uuid": "^9.0.0",
@@ -33,6 +33,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.0.3",
+    "firebase": "^9.15.0",
     "lint-staged": "^11.1.2",
     "prettier": "^2.4.1",
     "sass": "^1.32.7",
