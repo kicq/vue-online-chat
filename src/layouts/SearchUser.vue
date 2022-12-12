@@ -45,7 +45,6 @@ const filtered = computed(() => {
 
 onMounted(async () => {
   users.value = await Users.getUserList();
-  users.value.push(...users.value);
 });
 </script>
 
