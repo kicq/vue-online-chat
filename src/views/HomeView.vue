@@ -3,13 +3,13 @@
     <HeaderLayout />
     <div class="content">
       <ChatsList
-        :class="{ hidden: showChat }"
-        @onSelect="showChat = !showChat"
+        @onSelect="selectChat"
+        :class="{ hidden: displayDialogMobile }"
       />
       <DialogBox
-        :showChat="showChat"
-        :class="{ hidden: !showChat }"
-        @onExit="() => (showChat = !showChat)"
+        :showChat="displayDialogMobile"
+        :class="{ hidden: !displayDialogMobile }"
+        @onExit="toDialogs"
       />
     </div>
     <PopUp v-if="showSettings" />
@@ -22,9 +22,21 @@ import ChatsList from "@/layouts/ChatsList.vue";
 import DialogBox from "@/layouts/DialogBox.vue";
 import { ref } from "vue";
 import PopUp from "@/layouts/PopUp.vue";
+import { dialogsStore } from "@/store/dialogs";
 
-const showChat = ref(true);
+const displayDialogMobile = ref(false);
 const showSettings = ref(false);
+
+function selectChat(chatUid: string) {
+  displayDialogMobile.value = true;
+  if (!chatUid) return;
+  dialogsStore.selectDialog(chatUid);
+}
+
+function toDialogs() {
+  displayDialogMobile.value = false;
+  dialogsStore.reset();
+}
 </script>
 
 <style lang="scss" scoped>

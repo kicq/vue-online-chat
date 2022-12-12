@@ -1,7 +1,14 @@
 <template>
   <div class="send-input-block">
-    <input placeholder="Send a message..." type="text" name="chat" id="" />
-    <button>
+    <input
+      v-model="value"
+      @keyup.enter="sendMessage"
+      placeholder="Send a message..."
+      type="text"
+      name="chat"
+      autocomplete="off"
+    />
+    <button @click="sendMessage">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="45"
@@ -24,7 +31,21 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { ref } from "vue";
+
+interface Emits {
+  (event: "onInput", text: string): void;
+}
+const emit = defineEmits<Emits>();
+
+const value = ref("");
+
+function sendMessage() {
+  emit("onInput", value.value);
+  value.value = "";
+}
+</script>
 
 <style lang="scss" scoped>
 @import "@/assets/styles/variables.scss";

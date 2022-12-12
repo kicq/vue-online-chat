@@ -28,7 +28,7 @@ export class Validation {
   }
 
   static username(value: string): ReturnData {
-    const regex = /^[a-z0-9_-]{3,16}$/;
+    const regex = /^[A-Za-z0-9 ]{3,16}$/;
     if (!regex.test(value)) {
       return { message: "This field must be a valid username", error: true };
     }

@@ -8,20 +8,20 @@
         validateType="email"
         type="email"
         required
-        placeholder="Введите логин"
+        placeholder="Input password"
         @isValidValue="setValid('email', $event)"
       />
       <InputText
         v-model="form.password"
-        title="Пароль"
-        placeholder="Введите пароль"
+        title="password"
+        placeholder="Enter password"
         validateType="password"
         required
         type="password"
         @isValidValue="setValid('password', $event)"
       />
       <span class="error-text">{{ errorText }}</span>
-      <ButtonComponent type="submit" text="Войти" :disabled="disabled" />
+      <ButtonComponent type="submit" text="Sign In" :disabled="disabled" />
       <div class="subtitle">
         New? <RouterLink to="/signup">Create an account.</RouterLink>
       </div>

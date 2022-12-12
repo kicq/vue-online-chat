@@ -1,7 +1,10 @@
 <template>
   <div class="head-line">
     <div class="content">
-      <div class="title">SpaceChat</div>
+      <div class="title">
+        <LogoSVG />
+        <span>SpaceChat</span>
+      </div>
       <div class="right">
         <div class="username">
           {{ user.name }}
@@ -14,6 +17,7 @@
 
 <script lang="ts" setup>
 import ButtonComponent from "@/components/ButtonComponent.vue";
+import LogoSVG from "@/components/LogoSVG.vue";
 import { store } from "@/store";
 import User from "@/store/user";
 import { getModule } from "vuex-module-decorators";
@@ -39,12 +43,15 @@ function logOut() {
   .content {
     margin: 0 auto;
     max-width: 90rem;
-    padding: 0 0 0 1.5rem;
+    padding: 0 0.5rem 0 1.5rem;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     .title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
       font-size: 1.6rem;
       font-weight: 800;
       letter-spacing: 0.12rem;
@@ -57,6 +64,21 @@ function logOut() {
         font-size: 1.4rem;
         font-weight: 700;
       }
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .title {
+    span {
+      display: none;
+    }
+  }
+
+  .head-line .content .right {
+    gap: 1rem;
+    .username {
+      font-size: 1rem;
     }
   }
 }

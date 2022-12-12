@@ -1,4 +1,4 @@
-import { app } from "./app";
+import { app, db } from "./app";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -8,11 +8,17 @@ import {
   updateProfile,
   User,
 } from "firebase/auth";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+} from "firebase/firestore";
 import { UserInfo } from "@/@types/user";
 
 const auth = getAuth(app);
-const db = getFirestore(app);
 
 interface UserDataCommon {
   user: UserInfo | null;
@@ -91,8 +97,6 @@ export default class Users {
   static getCurrentUser() {
     return new Promise<UserDataResponse | UserDataError>((resolve, reject) => {
       onAuthStateChanged(auth, (user) => {
-        console.log("onAuthStateChanged", user);
-
         if (user) {
           resolve(toUserDataResponse(user));
         } else reject(userDataReject(null));
@@ -108,6 +112,15 @@ export default class Users {
     return updateProfile(auth.currentUser, data)
       .then(() => true)
       .catch(() => false);
+  }
+
+  static async getUserList() {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef);
+    const querySnapshot = await (
+      await getDocs(q)
+    ).docs.map((doc) => doc.data() as UserInfo);
+    return querySnapshot;
   }
 }
 

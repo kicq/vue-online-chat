@@ -67,9 +67,9 @@ const valid = ref({
 
 const form = ref<SignUpForm>({
   email: "",
-  username: "kicq",
-  password: "123456",
-  passwordRepeat: "123456",
+  username: "",
+  password: "",
+  passwordRepeat: "",
 });
 
 function setValid(key: keyof SignUpForm, isValidValue: boolean) {

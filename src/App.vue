@@ -9,6 +9,10 @@ import Users from "./api/users";
 import router from "./router";
 import { store } from "./store";
 import User from "./store/user";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
+
+TimeAgo.addDefaultLocale(en);
 
 const { updateAuth, updateUser } = getModule(User, store);
 

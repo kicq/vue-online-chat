@@ -1,6 +1,6 @@
 <template>
   <div class="dialog-box">
-    <template v-if="props.showChat">
+    <template v-if="dialogsStore.currentDialog">
       <div class="headline">
         <div @click="emit('onExit')" class="arrow">
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -14,20 +14,22 @@
             />
           </svg>
         </div>
-        <div class="title">Kirill Kharitonov</div>
-        <AvatarCircle :size="2" />
+        <div class="title">
+          {{ dialogsStore.currentDialog.name }}
+        </div>
+        <AvatarCircle :name="dialogsStore.currentDialog.name" :size="2" />
       </div>
-      <div class="messages">
+      <div class="messages" ref="messages">
         <div class="content">
-          <MessageBlock :isAlignRight="false" />
-          <MessageBlock :isAlignRight="true" />
-          <MessageBlock :isAlignRight="false" />
-          <MessageBlock :isAlignRight="true" />
-          <MessageBlock :isAlignRight="false" />
-          <MessageBlock :isAlignRight="true" />
+          <MessageBlock
+            v-for="(item, key) of dialogsStore.currentMessages"
+            :key="key"
+            :messages="item"
+            :isAlignRight="item[0].senderUid === user.uid"
+          />
         </div>
       </div>
-      <SendInputBlock />
+      <SendInputBlock @onInput="handleSend($event)" />
     </template>
   </div>
 </template>
@@ -35,26 +37,36 @@
 <script lang="ts" setup>
 import AvatarCircle from "@/components/AvatarCircle.vue";
 import SendInputBlock from "@/components/SendInputBlock.vue";
+import { store } from "@/store";
+import { dialogsStore } from "@/store/dialogs";
+import User from "@/store/user";
+import { onUpdated, ref } from "vue";
+import { getModule } from "vuex-module-decorators";
 import MessageBlock from "./MessageBlock.vue";
-interface Props {
-  showChat: boolean;
-}
-const props = withDefaults(defineProps<Props>(), {
-  showChat: false,
-});
+
+const { user } = getModule(User, store);
+
+const messages = ref<HTMLElement | null>(null);
 
 interface Emits {
-  // eslint-disable-next-line no-unused-vars
   (e: "onExit"): void;
 }
 const emit = defineEmits<Emits>();
+
+onUpdated(() => {
+  if (messages.value) messages.value.scrollTo(0, messages.value.scrollHeight);
+});
+
+function handleSend(text: string) {
+  dialogsStore.sendMessage(text, dialogsStore.currentDialog.name);
+}
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/styles/variables.scss";
 
 .dialog-box {
-  min-width: 30rem;
+  min-width: 10rem;
   width: 100%;
   background-size: cover;
   background: #005c97;
@@ -86,7 +98,7 @@ const emit = defineEmits<Emits>();
     }
     .avatar-circle {
       margin-left: auto;
-      margin-right: 3rem;
+      margin-right: 1rem;
     }
   }
 
@@ -95,6 +107,7 @@ const emit = defineEmits<Emits>();
     width: 100%;
     height: 100%;
     overflow-y: scroll;
+    scroll-behavior: smooth;
     .content {
       padding: 4rem 0 1.5rem;
       margin: 0 auto;
@@ -117,6 +130,24 @@ const emit = defineEmits<Emits>();
     .message-block {
       flex-shrink: 0;
     }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .dialog-box {
+    .messages {
+      // margin-bottom: 2rem;
+      .content {
+        padding: 2rem 0 0.5rem;
+        width: 100%;
+      }
+    }
+    // .send-input-block {
+    //   position: fixed;
+    //   bottom: 0;
+    //   left: 50%;
+    //   transform: translateX(-50%);
+    // }
   }
 }
 </style>

@@ -10,5 +10,5 @@ export const store = createStore<State>({
   modules: {
     user,
   },
-  strict: false,
+  strict: true,
 });

@@ -6,21 +6,35 @@
       width: `${size}rem`,
       height: `${size}rem`,
       outlineColor: ringColor,
+      background: color() + 'CC',
     }"
   >
-    H D
+    {{ name.slice(0, 2).toUpperCase() }}
   </div>
 </template>
 
 <script lang="ts" setup>
+import stc from "string-to-color";
+import { computed } from "vue";
+
 interface Props {
   size?: number;
   ringColor?: string;
+  name: string;
 }
-withDefaults(defineProps<Props>(), {
+
+const props = withDefaults(defineProps<Props>(), {
   size: 3,
-  ringColor: `rgb(68, 68, 68)`,
+  ringColor: "#ffffff",
 });
+
+const ringColor = computed(() => {
+  return stc(props.name) + "BA";
+});
+
+function color() {
+  return stc(props.name);
+}
 </script>
 
 <style lang="scss" scoped>
@@ -34,7 +48,7 @@ withDefaults(defineProps<Props>(), {
   align-items: center;
   justify-content: center;
   text-align: center;
-  outline: 0.2rem solid rgb(68, 68, 68);
+  outline: 0.1rem solid rgb(68, 68, 68);
   outline-offset: 0.1rem;
 }
 </style>

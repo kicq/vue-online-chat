@@ -1,6 +1,7 @@
 // Your web app's Firebase configuration
 
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_FIREBASE_APIKEY,
@@ -14,3 +15,5 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
+
+export const db = getFirestore(app);
