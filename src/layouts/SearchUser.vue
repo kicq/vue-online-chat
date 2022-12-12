@@ -38,20 +38,28 @@ const users = ref<UserInfo[]>([]);
 const filtered = computed(() => {
   return users.value.filter(
     (v) =>
-      v.name.toLowerCase().includes(searchString.value) && v.uid !== user.uid
+      v.name.toLowerCase().includes(searchString.value.toLowerCase()) &&
+      v.uid !== user.uid
   );
 });
 
 onMounted(async () => {
   users.value = await Users.getUserList();
+  users.value.push(...users.value);
 });
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/styles/main.scss";
 @import "@/assets/styles/variables.scss";
 .search-user {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  .content {
+    overflow-y: auto;
+    @include scroll-bar;
+  }
 }
 .user {
   display: flex;
@@ -60,6 +68,7 @@ onMounted(async () => {
   padding: 0.5rem 0.6rem;
   border-radius: 1rem;
   transition: 0.3s;
+  margin-right: 0.4rem;
   cursor: pointer;
   .name {
     font-size: 1.2rem;

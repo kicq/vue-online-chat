@@ -63,6 +63,7 @@ function handleSend(text: string) {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/styles/main.scss";
 @import "@/assets/styles/variables.scss";
 
 .dialog-box {
@@ -116,17 +117,7 @@ function handleSend(text: string) {
       flex-direction: column;
       gap: 1rem;
     }
-    &::-webkit-scrollbar {
-      width: 0.5rem;
-    }
-    &::-webkit-scrollbar-track {
-      background-color: rgba(130, 120, 120, 0);
-      border-radius: 1rem;
-    }
-    &::-webkit-scrollbar-thumb {
-      border-radius: 1rem;
-      box-shadow: inset 0 0 1rem rgba($white, 0.1);
-    }
+    @include scroll-bar;
     .message-block {
       flex-shrink: 0;
     }
@@ -136,18 +127,11 @@ function handleSend(text: string) {
 @media screen and (max-width: 500px) {
   .dialog-box {
     .messages {
-      // margin-bottom: 2rem;
       .content {
         padding: 2rem 0 0.5rem;
         width: 100%;
       }
     }
-    // .send-input-block {
-    //   position: fixed;
-    //   bottom: 0;
-    //   left: 50%;
-    //   transform: translateX(-50%);
-    // }
   }
 }
 </style>
