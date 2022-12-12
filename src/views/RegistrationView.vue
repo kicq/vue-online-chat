@@ -5,7 +5,7 @@
       <InputText
         v-model="form.username"
         title="Username"
-        placeholder="Enter username"
+        placeholder="Example: Andrew Smith"
         validateType="username"
         @isValidValue="setValid('username', $event)"
         required
@@ -13,7 +13,7 @@
       <InputText
         v-model="form.email"
         title="Email"
-        placeholder="Enter your email"
+        placeholder="Example: example@gm.ru"
         validateType="email"
         @isValidValue="setValid('email', $event)"
         required
@@ -21,7 +21,7 @@
       <InputText
         v-model="form.password"
         title="Password"
-        placeholder="Enter password"
+        placeholder="Example: '123456'"
         type="password"
         validateType="password"
         @isValidValue="setValid('password', $event)"

@@ -8,13 +8,13 @@
         validateType="email"
         type="email"
         required
-        placeholder="Input password"
+        placeholder="Example: mail@gmail.com"
         @isValidValue="setValid('email', $event)"
       />
       <InputText
         v-model="form.password"
-        title="password"
-        placeholder="Enter password"
+        title="Password"
+        placeholder="Example: 123456"
         validateType="password"
         required
         type="password"
