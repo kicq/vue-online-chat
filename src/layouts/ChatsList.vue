@@ -30,6 +30,10 @@
           </div>
         </div>
       </div>
+      <div class="empty" v-if="!dialogsStore.sortedDialogs.length">
+        <div>You have not any dialogs</div>
+        <div class="fill" @click="currentTabIndex++">> Search user</div>
+      </div>
     </div>
     <template v-if="tabList[currentTabIndex].key === 'search'">
       <SearchUser @onSelect="openNewDialog" />
@@ -92,6 +96,22 @@ const emit = defineEmits<Emits>();
     gap: 5px;
     &::-webkit-scrollbar {
       width: 0;
+    }
+  }
+
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    color: rgba($white, 0.5);
+    .fill {
+      cursor: pointer;
+      text-decoration: underline;
+      color: $white;
+      &:hover {
+        color: $blue;
+      }
     }
   }
 
